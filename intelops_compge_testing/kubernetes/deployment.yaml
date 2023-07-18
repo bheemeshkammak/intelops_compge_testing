@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: intelops_compge_testing
+  name: intelops_compge_testing
+  labels:
+    app: intelops_compge_testing
+spec:
+  selector:
+    matchLabels:
+      app: intelops_compge_testing
+  template:
+    metadata:
+      labels:
+        app: intelops_compge_testing
+        name: intelops_compge_testing
+    spec:
+      containers:
+        - name: intelops_compge_testing
+          image: bheemeshkammak/intelops_compge_testing/intelops_compge_testing
+          imagePullPolicy: Always
+        
+          env:
+            - name: SERVICE_NAME
+              value: "go-app"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "localhost:4317"
+            - name: INSECURE_MODE
+              value: "true"
+        
+          ports:
+        
+        
+          - containerPort: 9876
+            name: http
+        
+        
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+        
